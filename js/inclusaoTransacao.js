@@ -1,7 +1,7 @@
 function incluirTransacao() {
     // Aqui a gente busca dos dados tela e coloca em variáveis
     const titulo = document.getElementById("title").value;
-    const valor = document.getElementById("value").value;
+    const valor =  parseInt(document.getElementById("value").value);
     const tipo = document.getElementById("type").value;
 
     if (!titulo) {

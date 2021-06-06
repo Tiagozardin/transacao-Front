@@ -1,22 +1,23 @@
-window.addEventListener('load', () => {
+window.addEventListener('load', async () => {
     const id = localStorage.getItem("id");
     const idTransacao = localStorage.getItem("idTransacao");
 
-    axios.get(`https://growdev-aula26.herokuapp.com/user/${id}/transactions/${idTransacao}`)
-        .then((resposta) => {
-            const { title, value, type} = resposta.data;
+    const transactionInf = await axios.get(`https://growdev-aula26.herokuapp.com/user/${id}/transactions/${idTransacao}`)
+    .then((resposta) => {
+        return resposta.data;
+    });
 
-            document.getElementById("title").value = title;
-            document.getElementById("value").value = value;
-            document.getElementById("type").value = type;
-        }
-        );
+    document.getElementById("titulo").value = transactionInf.title;
+    document.getElementById("valor").value = transactionInf.value;
+    document.getElementById("tipo").value = transactionInf.type;
 });
 
-function atualizarTransacao() {
+async function atualizarTransacao() {
+    const userId = localStorage.getItem("id");
+
     const id = localStorage.getItem("idTransacao");
     const titulo = document.getElementById("titulo").value;
-    const valor = document.getElementById("valor").value;
+    const valor =  parseInt(document.getElementById("valor").value);
     const tipo = document.getElementById("tipo").value;
 
     if (!titulo) {
@@ -40,7 +41,7 @@ function atualizarTransacao() {
         return;
       }
 
-    axios.put(`https://growdev-aula26.herokuapp.com/user/${id}/transactions/${idTransacao}`, {
+    await axios.put(`https://growdev-aula26.herokuapp.com/users/${userId}/transactions/${id}`, {
         title: titulo,
         value: valor,
         type: tipo,
@@ -60,7 +61,7 @@ function excluirTransacao() {
     const id = localStorage.getItem("id");
     const idTransacao = localStorage.getItem("idTransacao");
 
-    axios.delete(`https://growdev-aula26.herokuapp.com/user/${id}/transactions/${idTransacao}`)
+    axios.delete(`https://growdev-aula26.herokuapp.com/users/${id}/transactions/${idTransacao}`)
         .then((resposta) => {
             if (resposta.data) {
                 alert("Registro Excluído");
